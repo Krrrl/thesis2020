@@ -1,0 +1,4 @@
+gym
+numpy<=1.11.1
+rospy
+gym_manipulator_interface

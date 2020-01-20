@@ -1,0 +1,60 @@
+This document contains the different things of note during development of the platform.
+
+
+
+
+
+
+
+The wiring of the stepper motor:
+The motor is a NEMA-17 6-wire motor, so each of the coils have a "common" wire.
+Since there is no need for half-coil operation, only the full coil wires are wired, and the "common" wires are left unconnected.
+See illustration of this at: https://knowledge.ni.com/servlet/rtaImage?eid=ka00Z0000011FiE&feoid=00N0Z00000HEWRt&refid=0EM0Z000000W6sL
+
+To determine the correct wires, resistance was measured over every wire-pair, with the following results:
+
+		Green 	Blue 	Yellow 		White 	 Black 	    Red
+Green 	 S		 --	 	  40		 -- 	  80		--
+Blue	 --		 S		  --		 40		  --		80
+Yellow	 40		 --		  S			 --		  40		--
+White    --		 40		  --		 S		  --		40
+Black    80		 --		  40		 --       S         --
+Red 	 --	     80		  --		 40		  --		S
+
+With "S" indicating self, and "--" indicating infinite resistance.
+
+From this, we see that the full coil pairs are: Black-Green and Blue-Red.
+Thus, the white and yellow wires are the "common" ones, which will remain unconnected.
+
+
+See schematic for wiring of motor-encoder-esp system.
+
+
+CODE:
+NOTE that the ESP can NOT be flashed or reset, when mounted in the experimental setup.
+
+NOTICE that the system does not use INTERRUPTS. This is because the polling happens at a high enough rate, considering the slow rate of change of the lever.
+If there was a lot going on on the arduino, a change to pin-change-interrupts on CHA_A_PIN and CHA_B_PIN would be necessary.
+
+Perhaps could the dir-functionality be removed alltogether.
+
+ENCODER ENCODING:
+   AB
+0: 00
+1: 10
+2: 11
+3: 01
+
+	POSSIBLE ISSUES:
+		take_step delay too little for it to finish executing.
+			SYMPTOMS: Motor does not stop at designation but goes past
+			FIX:	  Increasing take_step() delay to the time it takes to finish a step.
+
+
+ISSUES:
+	ESP can not be flashed when mounted in experimental setup.
+	ESP can not be button reset when mounted in experimenta setup.
+		-The two are probably caused by a hardware fault. Possibly from a mechanical error in the breadboard. This has low impact on project, and no impact on functionality.
+
+	
+	

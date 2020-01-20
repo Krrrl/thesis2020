@@ -1,0 +1,5 @@
+-IMPLEMENT random manipulator init.
+
+-wait_for_action_execution() is blocking, perhaps this time could be utilized somewhere else in the meantime.
+
+-Make ManipulatorLeverEnv inherit from both embedded_lever_interface and eavesdropper.

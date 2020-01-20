@@ -1,0 +1,2 @@
+Dont use the embedded reward function all together, since it was created as a placeholder.
+Please just poll the levers absolute or relative position, and base your rewards on that.
