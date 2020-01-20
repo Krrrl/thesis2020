@@ -1,3 +1,4 @@
+# GYM framework
 This python package provides a framework for training reinforcement learning algorithms on the OpenManipulator-X platform.
 The package consists of three distinct parts:
 
@@ -10,20 +11,20 @@ Each of these modules has its own README that supplies details about their appli
 
 
 
-
-How to use:
+# How to use:
 --------------------------------------------------------------------------------
-Given that you have FIRST installed the ROS package "rl_manipulator_lever_env".
+Given that you have FIRST installed the ROS package "gym_manipulator_interface"(also provided in this repository).
 See its README for details on how to install it.
 --------------------------------------------------------------------------------
-/manipulator_lever_task_environment$ pip install --user -e .
+YOUR/PATH/manipulator_training$ python setup.py install --user
+(alternatively, use the command "$ pip install --user -e . " if you are activly developing on the framework).
 
 $ python
 
 >>> import gym
->>> import custom_gym_env.envs
->>> import manipulator_state_listener.eavesdrop as eavesdrop
->>> from lever_interface.interface import Lever as LeverClass
+>>> import gym_environments.envs
+>>> import ros_message_listener.eavesdrop as eavesdrop
+>>> from embedded_lever_interface.interface import Lever as LeverClass
 >>> from ManipulatorAction import ManipulatorAction
 
 >>> action_space = ManipulatorAction()
@@ -43,7 +44,7 @@ etc.
 ------------------------------
 ------------------------------
 
-Alternatively, the following is the full proceedure for the complete integrations test of GYM environment + lever + open_manipulator.
+Alternatively, the following is the full proceedure for the complete integrations test of GYM environment + lever + OpenManipulator.
 Each command runs from a seperate terminal.
 NB! Make sure that the lever is in the upright position, and the manipulator is in its recommended starting position(resting on only the claw).
 
