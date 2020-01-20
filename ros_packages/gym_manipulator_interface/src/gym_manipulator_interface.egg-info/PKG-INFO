@@ -1,0 +1,10 @@
+Metadata-Version: 1.0
+Name: gym-manipulator-interface
+Version: 0.0.1
+Summary: This package provides an interface between the OpenManipulator platform and OpenAI GYM environment.
+Home-page: UNKNOWN
+Author: krrrl
+Author-email: km.ylvisaker@gmail.com
+License: MIT
+Description: UNKNOWN
+Platform: UNKNOWN

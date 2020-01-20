@@ -1,0 +1,75 @@
+#!/usr/bin/env python
+
+import rospy
+
+from std_msgs.msg import String
+
+
+class ActionPublisher():
+
+	def __init__(self, frequency):
+		self.action_stack = []
+
+		self.pub = rospy.Publisher('agent_actions', String, queue_size = 10)
+		rospy.init_node('agent_actions', anonymous=True)
+
+		self.rate = rospy.Rate(frequency)
+
+	def printQueue(self):
+		for i in range(0, len(self.action_stack)):
+			print("\nAction {} is {}".format(i, self.action_stack[i]))
+
+	def queueAction(self, action):
+		self.action_stack.append(action)
+
+	def publishAction(self):
+		while not rospy.is_shutdown:
+			if(self.action_stack):
+				action = action_stack.pop()
+				rospy.loginfo(action)
+				self.pub.publish(action)
+				print("Published message %s", action)
+			else:
+				print("Action stack empty.")
+			self.rate.sleep()
+
+	def pubAct(self, act):
+		rospy.loginfo(act)
+		self.pub.publish(act)
+		print("Doing it!")
+
+
+
+
+
+
+# action_publisher code as supplied by ROS foundation
+# def actionPublisher(action_to_publish):
+
+
+
+# 	pub = rospy.Publisher('agent_actions', String, queue_size = 10)
+# 	rospy.init_node('agent_actions', anonymous=True)
+# 	rate = rospy.Rate(100) #100Hz
+
+
+# 	rospy.loginfo(action_to_publish)
+# 	pub.publish(action_to_publish)
+
+# 	while not rospy.is_shutdown():
+# 		init_str = "Agent reporting at %s" % rospy.get_time()
+# 		rospy.loginfo(init_str)
+# 		pub.publish(init_str)
+# 		rate.sleep()
+
+if __name__ == '__main__':
+	try:
+		publisher = ActionPublisher(1000)
+		publisher.pubAct('x')
+		publisher.queueAction('a')
+		publisher.queueAction('b')
+		publisher.queueAction('c')
+		publisher.printQueue()
+		publisher.publishAction()
+	except rospy.ROSInterruptException:
+		pass

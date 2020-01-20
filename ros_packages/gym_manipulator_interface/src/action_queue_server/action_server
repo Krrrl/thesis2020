@@ -1,0 +1,56 @@
+#!/usr/bin/env python
+
+import sys
+import rospy
+
+from gym_ros_interface.srv import ActionQueue
+
+action_space = {0:'y', 
+								1:'h',
+								2:'u',
+								3:'j',
+								4:'i',
+								5:'k',
+								6:'o',
+								7:'l',
+								8:'g',
+								9:'f',
+								'init':'1',
+								'home':'2'}
+
+queued_actions = []
+
+def handle_queue_request(req):
+	
+	if(req.request_type == "POP"):
+		print("Executing action!\n")
+		if(queued_actions):
+			print("Current action queue: %s \n" %queued_actions)
+			action = queued_actions.pop(0)
+			print("Executed action: %s \n" %action)
+		else:
+			print("No actions queued!")
+			action = '!'
+			
+		return action
+
+
+	elif(req.request_type == "APPEND"):
+		print("Queueing action!\n")
+		queued_actions.append(req.action)
+		print("Action %s was queued!\n" % req.action)
+		return "SUCCESS"
+
+	else:
+		print("Received invalid request!")
+
+
+def action_server():
+	rospy.init_node('action_server')
+	server = rospy.Service('queue_action', ActionQueue, handle_queue_request)
+	print("Action-queue server is up!")
+	rospy.spin()
+
+
+if __name__ == '__main__':
+	action_server()
