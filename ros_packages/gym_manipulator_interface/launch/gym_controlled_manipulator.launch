@@ -1,0 +1,42 @@
+<launch>
+  <arg name="robot_name"   default="open_manipulator"/>
+  <arg name="end_effector" default="gripper"/>
+  
+  <arg name="dynamixel_usb_port"     default="/dev/ttyUSB0"/>
+  <arg name="dynamixel_baud_rate"    default="1000000"/>
+
+  <arg name="control_period"         default="0.010"/>
+
+  <arg name="use_platform"           default="true"/>
+
+  <arg name="use_moveit"             default="false"/>
+  <arg name="planning_group_name"    default="arm"/>
+  <arg name="moveit_sample_duration" default="0.050"/>  
+  
+  
+  <group if="$(arg use_moveit)">
+    <include file="$(find open_manipulator_controller)/launch/open_manipulator_moveit.launch">
+      <arg name="robot_name"      value="$(arg robot_name)"/>
+      <arg name="sample_duration" value="$(arg moveit_sample_duration)"/>
+    </include>
+  </group>
+
+  <node name="$(arg robot_name)" pkg="open_manipulator_controller" type="open_manipulator_controller" output="screen" args="$(arg dynamixel_usb_port) $(arg dynamixel_baud_rate)">
+      <param name="using_platform"       value="$(arg use_platform)"/>
+      <param name="using_moveit"         value="$(arg use_moveit)"/>
+      <param name="planning_group_name"  value="$(arg planning_group_name)"/>
+      <param name="control_period"       value="$(arg control_period)"/>
+      <param name="moveit_sample_duration"  value="$(arg moveit_sample_duration)"/>
+  </node>
+
+  <group ns="$(arg robot_name)">
+    <node name="teleop_gym" pkg="open_manipulator_teleop" type="open_manipulator_teleop_gym" output="screen">
+      <remap from="kinematics_pose" to="$(arg end_effector)/kinematics_pose"/>
+      <param name="end_effector_name" value="$(arg end_effector)"/>
+    </node>
+    
+    <node name="action_server_node" pkg="gym_manipulator_interface" type="action_server" output="screen">
+      <param name="end_effector_name" value="$(arg end_effector)"/>
+    </node>
+  </group>
+</launch>

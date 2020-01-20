@@ -1,0 +1,10 @@
+<launch>
+  <arg name="robot_name"   default="open_manipulator"/>
+  <arg name="end_effector" default="gripper"/>
+
+  <group ns="$(arg robot_name)">
+    <node name="action_server_node" pkg="gym_manipulator_interface" type="action_server" output="screen">
+      <param name="end_effector_name" value="$(arg end_effector)"/>
+    </node>
+  </group>
+</launch>

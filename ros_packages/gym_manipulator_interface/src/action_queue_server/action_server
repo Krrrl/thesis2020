@@ -3,7 +3,7 @@
 import sys
 import rospy
 
-from gym_ros_interface.srv import ActionQueue
+from gym_manipulator_interface.srv import ActionQueue
 
 action_space = {0:'y', 
 								1:'h',
