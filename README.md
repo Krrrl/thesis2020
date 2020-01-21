@@ -3,23 +3,53 @@ This repo contains the code associated with my master thesis at ITK, NTNU, 2020.
 The objective of the thesis was to create a framework for 
 
 
-## SETUP
+## COMPLETE SETUP
 Please follow the steps provided.
 
 ### 1. Prerequisits
 Install ROS kinetic and ROBOTIS' open_manipulator supplied software on a computer running Ubuntu 16.04.
 Follow these two guides, to complete the aforementioned:
 
-#### ROS kinetic
+#### ROS kinetic & ROBOTIS package
 http://wiki.ros.org/kinetic/Installation/Ubuntu
-Choose the full-desktop install, preferably(the regular desktop install works too).
-
-#### ROBOTIS package
 http://emanual.robotis.com/docs/en/platform/openmanipulator_x/overview/#overview
-Complete step 5 and 6.
 
-### 2. Clone this repository
-To a destination of your choice, just _do not_ put the entier thing into your catkin workspace.
+Installing ROS Kinetic(compressed install by ROBOTIS):
+```shell
+$sudo apt-get update && apt-get upgrade
+$ cd YOUR/PATH/ROS
+$ mkdir catkin_ws
+$ cd catkin_ws
+$ wget https://raw.githubusercontent.com/ROBOTIS-GIT/robotis_tools/master/install_ros_kinetic.sh && chmod 755 ./install_ros_kinetic.sh && bash ./install_ros_kinetic.sh
+$ catkin_make
+```
+The last command should not return any errors.
+
+Installing ROBOTIS packages(provided by ROBOTIS):
+```shell
+$ sudo apt-get install ros-kinetic-ros-controllers ros-kinetic-gazebo* ros-kinetic-moveit* ros-kinetic-industrial-core
+$ cd ~/catkin_ws/src/
+$ git clone https://github.com/ROBOTIS-GIT/DynamixelSDK.git
+$ git clone https://github.com/ROBOTIS-GIT/dynamixel-workbench.git
+$ git clone https://github.com/ROBOTIS-GIT/dynamixel-workbench-msgs.git
+$ git clone https://github.com/ROBOTIS-GIT/open_manipulator.git
+$ git clone https://github.com/ROBOTIS-GIT/open_manipulator_msgs.git
+$ git clone https://github.com/ROBOTIS-GIT/open_manipulator_simulations.git
+$ git clone https://github.com/ROBOTIS-GIT/robotis_manipulator.git
+$ cd ~/catkin_ws && catkin_make
+```
+The last command should not return any errors.
+
+### 2. Clone the thesis repository
+Place it at a destination of your choice, just _do not_ put the entier thing into your catkin workspace.
+```shell
+$ cd YOUR/PATH
+$ git clone https://github.com/krrrl/thesis2020
+$ cd thesis2020/manipulator_training
+$ sudo chmod +x setup.py
+$ cd gym_environments/envs/lever_env
+$ chmod +x ManipulatorLeverEnv.py
+```
 
 ### 3. Augment the ROBOTIS package
 Follow the instructions of the ros_packages/README.md, namely:
@@ -27,6 +57,10 @@ Follow the instructions of the ros_packages/README.md, namely:
 - Replace ROBOTIS packge open_manipulator_msgs with the augmented version.
 - Replace ROBOTIS package open_manipulator/open_manipulator_teleop with the augmented version.
 - cd ~/yourpath/catkin_ws && catkin_make
+
+```shell
+$ 
+```
 
 ### 4. Install manipulator_training python package
 Follow the instructions of the manipulator_training/README.md, namely:
