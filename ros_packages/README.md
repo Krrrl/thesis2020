@@ -16,3 +16,7 @@ The augmented version should replace your official version.
 ### open_manipulator_msgs
 open_manipulator_msgs is also augmented, and should replace the official version.
 The augemntation is just the addition of the action_queue service from gym_manipulator_interface.
+
+
+#### CHANGELOG
+Please see the CHANGELOG.md for an exact changes/amendments done to the supplied open_manipulator ros packages.
