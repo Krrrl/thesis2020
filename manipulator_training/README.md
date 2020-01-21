@@ -20,12 +20,17 @@ YOUR/PATH/manipulator_training$ python setup.py install --user
 $ python
 
 &gt;&gt;&gt; import gym
+
 &gt;&gt;&gt; import gym_environments.envs
+
 &gt;&gt;&gt; import ros_message_listener.eavesdrop as eavesdrop
+
 &gt;&gt;&gt; from embedded_lever_interface.interface import Lever as LeverClass
+
 &gt;&gt;&gt; from ManipulatorAction import ManipulatorAction
 
 &gt;&gt;&gt; action_space = ManipulatorAction()
+
 &gt;&gt;&gt; lever = LeverClass()
 
 &gt;&gt;&gt; env = gym.make('ManipulatorLeverEnv-v0', ManipulatorActions = action_space, LeverInstance = lever, goal_state=250)
