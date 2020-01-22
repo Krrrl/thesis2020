@@ -8,6 +8,8 @@ find_package(catkin REQUIRED COMPONENTS
   message_generation
 )
 
+catkin_python_setup()
+
 add_service_files(FILES
    ActionQueue.srv
 )
