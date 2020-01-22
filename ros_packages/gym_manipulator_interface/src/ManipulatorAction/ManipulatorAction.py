@@ -4,7 +4,7 @@ import rospy
 import random as rn
 import time
 
-from gym_ros_interface.srv import ActionQueue
+from gym_manipulator_interface.srv import ActionQueue
 
 class ManipulatorAction():
 
