@@ -122,7 +122,7 @@ $ roslaunch gym_manipulator_interface gym_controlled_manipulator.launch
 $ cd ~/YOUR/PATH/thesis2020/manipulator_training/gym_environments/envs/lever_env/
 $ python ManipulatorLeverEnv.py
 ```
-This should cause both the lever and
+This should cause both the lever and manipulator to move, settling at their respective reset positions.
 
 #### Et voila!
 You may now begin training of other algorithms, by using the classic gym recepie of env = gym.make('ManipulatorLeverEnv-v0', ..)!
