@@ -22,10 +22,8 @@ $ cd YOUR/PATH/ROS
 $ mkdir catkin_ws
 $ cd catkin_ws
 $ wget https://raw.githubusercontent.com/ROBOTIS-GIT/robotis_tools/master/install_ros_kinetic.sh && chmod 755 ./install_ros_kinetic.sh && bash ./install_ros_kinetic.sh
-$ catkin_make
-$ source devel/setup.bash
 ```
-catkin_make command should not return any errors.
+Please reboot your computer before proceeding to the next step.
 
 Installing ROBOTIS packages(provided by ROBOTIS):
 ```shell
