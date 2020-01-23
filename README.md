@@ -43,7 +43,7 @@ $ source devel/setup.bash
 ```
 catkin_make command should not return any errors.
 
-###### Changing latency setting
+##### Changing latency setting
 The default latency of serial communication on Ubuntu 16.04 is 16 ms.
 To change it to 1 ms, do the following:
 Open a separate terminal for the roscore:
@@ -108,7 +108,7 @@ Now, you should also check and make sure that the hardware is connected properly
 The manipulator should always be placed in its prefered starting position before use.
 Please see have a look at the picture provided at: <http://emanual.robotis.com/docs/en/platform/openmanipulator_x/ros_controller_package/#launch-controller>
 
-##### Verification of installation
+#### Verification of installation
 To verify that the entire installation is complete, we will execute the framework's integration test.
 In three separate terminals, run the commands:
 
@@ -126,7 +126,7 @@ $ python ManipulatorLeverEnv.py
 ```
 This should cause both the lever and
 
-####Et voila!
+#### Et voila!
 You may now begin training of other algorithms, by using the classic gym recepie of env = gym.make('ManipulatorLeverEnv-v0', ..)!
 
 ## Contact
