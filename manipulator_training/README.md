@@ -8,56 +8,18 @@ The package consists of three distinct parts:
 
 Each of these modules has its own README that supplies details about their application and internal workings.
 
-# Install
-1. Move the manipulator_training directory to a directory of your choice(not your catkin workspace).
-
-2. $ cd YOUR/PATH/manipulator_training
-
-##### for active developers:
-3. $ pip install --user -e .
-
-##### for framework users: 
-4. $ python setup.py install --user
-
-5. Verify the installation by completing the verification of framework install
-
-# Verification of framework install
-The following is the full proceedure for the complete integrations test of GYM environment + lever + OpenManipulator.
-Each command runs from a seperate terminal.
-NB! Make sure that the lever is in the upright position, and the manipulator is in its recommended starting position(resting on only the claw).
-
-$ roscore
-
-$ roslaunch open_manipulator_controller open_manipulator_controller.launch
-
-$ roslaunch gym_ros_interface action_server.launch
-
-$ roslaunch open_manipulator_teleop open_manipulator_teleop_agent
-
-$ python ManipulatorLeverEnv.py
-
-The result of the last command will cause both manipulator and lever to move. The lever resets trice(a unit-test of the lever interface is performed), first to its end-position and then to a random position, before coming to rest at the endpoint positon.
-The manipulator gets a total of 17 inputs to increase its second joint angle, causing it to tilt upwards, about a quarter of its full range.
-
 --------------------------------------------------------------------------------
 
-# How to use:
-NB! This package will not work without FIRST installing the ros_packages also contained in this repo.
+## How to begin training:
+NB! This package will not work without FIRST installing the ros_packages also contained in this repository!
+Please make sure that all steps of the installation guide are complete, before attempting to use the framework.
 
-For convinience, there exists a shorthand for the roslaunch steps in the verification:
+Upon release, the framework only contains one physical manipulation task: the lever_env GYM environment.
+The basic usage of the framework is as follows:
 
-
-----------------------------
-
-$ roscore
-
-----------------------------
-
-$ roslaunch gym_manipulator_interface gym_controlled_manipulator.launch
-
-----------------------------
-
+```shell
 $ python2
+```
 
 &gt;&gt;&gt; import gym
 
@@ -75,11 +37,34 @@ $ python2
 
 &gt;&gt;&gt; env = gym.make('ManipulatorLeverEnv-v0', ManipulatorActions = action_space, LeverInstance = lever, goal_state=250)
 
-After this, you can call any of the ManipulatorLeverEnv class methods.
+You have now instanciated a working GYM environment, and can begin training.
 
-&gt;&gt;&gt; env.step(action)
 
-&gt;&gt;&gt; env.reset()
 
-etc.
+## Developing:
+If you would like to extend the framework by adding additional physical manipulation tasks, this is how you should proceed:
+
+
+#### 1.1
+Pick a great name for your new manipulation task environment.
+
+#### 1.2
+Make a renamed copy of the minimal GYM environment directory from manipulator_training/gym_environments/envs/minimal_GYM_env
+
+#### 1.3
+Modify the __init__.py file in manipulator_training/gym_environments/envs/ to include a register()-call for your new environment
+
+#### 1.4 
+Start filling out the minimal GYM template with the spesifics of your manipulation task.
+
+#### 1.5 
+Check out the modules/packages already available in the package. For example, if you need ROS access, have a look at using the manipulator_training/ros_message_listener module.
+
+#### 1.6 
+Create new modules/packages for your physical environment, place them in the base folder manipulator_training/, and remember to update dependencies in setup.py(if there are any).
+
+#### 1.7 DOCUMENT YOUR WORK.
+
+If you get stuck, have a look at how things are done for the lever_env.
+
 
