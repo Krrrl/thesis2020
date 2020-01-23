@@ -1,6 +1,7 @@
 #! /usr/bin/env python
 
 import rospy
+import std_msgs
 
 from open_manipulator_msgs.msg import KinematicsPose
 from open_manipulator_msgs.msg import OpenManipulatorState
@@ -26,6 +27,11 @@ def get_manipulator_moving_state():
 	else:
 		print("MANIPULATOR_MOVING_STATE is undefined?? The eavesdropper needs help.")
 
+
+def get_topic_message(topic, msg_type):
+	message = rospy.wait_for_message(topic, msg_type)
+	return message
+
 def get_available_topics_list():
 	topics = rospy.get_published_topics()
 	print(topics)
@@ -45,3 +51,9 @@ if __name__ == '__main__':
 	data = get_manipulator_moving_state()
 	print("Got the data!")
 	print("IS_MOVING: {}".format(data))
+
+
+	print("GENERAL FUNCTION TEST")
+	print("JOINT4 COMMAND")
+	print(get_topic_message("/open_manipulator/joint4_position/command", std_msgs.msg.Float64))
+	print("-----------------")
