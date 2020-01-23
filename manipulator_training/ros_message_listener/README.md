@@ -17,15 +17,15 @@ The module making use of the eavesdropper MUST call the init_eavesdropper functi
 
 ## How to use:
 The eavesdrop module has some topic-spesific functions implemented(namely for the OpenManipulator state topics), but it also provides a general function to extract messages.
+```python
+>>> import eavesdrop
 
-&gt;&gt;&gt; import eavesdrop
+>>> eavesdrop.init_eavesdropper()
 
-&gt;&gt;&gt; init_eavesdropper()
+>>> pose = eavesdrop.get_gripper_kinematics_pose()
 
-&gt;&gt;&gt; pose = eavesdrop.get_gripper_kinematics_pose()
-
-&gt;&gt;&gt; moving_state = eavesdrop.get_manipulator_moving_state()
-
+>>> moving_state = eavesdrop.get_manipulator_moving_state()
+```
 #### General case:
 
 &gt;&gt;&gt; msg = get_topic_message(topic_name -> str, msg_type)
