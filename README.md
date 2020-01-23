@@ -3,7 +3,7 @@ This repo contains the code associated with my master thesis at ITK, NTNU, 2020.
 The objective of the thesis was to create a framework for 
 
 
-## COMPLETE SETUP
+## COMPLETE FRAMEWORK INSTALLATION
 Please follow the steps provided.
 
 ### 1. Prerequisits
@@ -11,6 +11,7 @@ Install ROS kinetic and ROBOTIS' open_manipulator supplied software on a compute
 Follow these two guides, to complete the aforementioned:
 
 #### ROS kinetic & ROBOTIS package
+The installation of ROS kinetic and the ROBOTIS packages can be read more about on their respective pages:
 http://wiki.ros.org/kinetic/Installation/Ubuntu
 http://emanual.robotis.com/docs/en/platform/openmanipulator_x/overview/#overview
 
@@ -42,6 +43,20 @@ $ source devel/setup.bash
 ```
 catkin_make command should not return any errors.
 
+###### Changing latency setting
+The default latency of serial communication on Ubuntu 16.04 is 16 ms.
+To change it to 1 ms, do the following:
+Open a separate terminal for the roscore:
+```shell
+$ roscore
+```
+Then open another terminal, executing the command:
+```shell
+$ rosrun open_manipulator_controller create_udev_rules
+```
+The last command will prompt a sudo login.
+
+
 ### 2. Clone the thesis repository
 Place it at a destination of your choice, just _do not_ put the entier thing into your catkin workspace.
 ```shell
@@ -60,10 +75,11 @@ Follow the instructions of the ros_packages/README.md, namely:
 - cd ~/yourpath/catkin_ws && catkin_make
 
 ```shell
-$ cd ~/YOUR/PATH/thesis2020/
-$ rsync -a -vh --delete ros_packages/open_manipulator_msgs/ ~/catkin_ws/src/open_manipulator_msgs/
-$ rsync -a -vh --delete ros_packages/open_manipulator/open_manipulator_teleop/ ~/catkin_ws/src/open_manipulator/open_manipulator_teleop/
-$ cp -a gym_manipulator_interface/ ~/catkin_ws/src/
+$ cd ~/YOUR/PATH/thesis2020/ros_packages/
+$ mv ros_packages/gym-manipulator-interface.egg-link /usr/local/lib/python2.7/dist-packages/
+$ mv gym_manipulator_interface/ ~/catkin_ws/src/
+$ rsync -a -vh --delete open_manipulator_msgs/ ~/catkin_ws/src/open_manipulator_msgs/
+$ rsync -a -vh --delete open_manipulator/open_manipulator_teleop/ ~/catkin_ws/src/open_manipulator/open_manipulator_teleop/
 $ cd ~/catkin_ws/ && catkin_make
 $ source devel/setup.bash
 ```
@@ -75,13 +91,42 @@ It should take you to the ~/catkin_ws/src/gym_manipulator_interface/ directory, 
 
 ### 4. Install manipulator_training python package
 Follow the instructions of the manipulator_training/README.md, namely:
-- Install the manipulator_training package to your python 2.7(yes, it is deprecated, but ROS kinetic will be sad if you dont).
+- Install the manipulator_training package
 - Make sure the hardware is set up as described in the README.
 - Verify its installation by running the ManipulatorLeverEnv executable.
 
+```shell
+$ cd ~/YOUR/PATH/manipulator_training
+$ pip install --user -e .
+```
+The last command will start a download of the required packages, before stating that it "successfully installed manipulator_training".
 
+Now, you should also check and make sure that the hardware is connected properly:
+-Manipulator connected according to <http://emanual.robotis.com/docs/en/platform/openmanipulator_x/ros_setup/#connection>
+-Lever: 230VAC power outlet and PC <USB> uStepper. NB! Power up with the lever in the _UPRIGHT_ position!
 
-Et voila!
+The manipulator should always be placed in its prefered starting position before use.
+Please see have a look at the picture provided at: <http://emanual.robotis.com/docs/en/platform/openmanipulator_x/ros_controller_package/#launch-controller>
+
+##### Verification of installation
+To verify that the entire installation is complete, we will execute the framework's integration test.
+In three separate terminals, run the commands:
+
+```shell
+$ roscore
+```
+
+```shell
+$ roslaunch gym_manipulator_interface gym_controlled_manipulator.launch
+```
+
+```shell
+$ cd ~/YOUR/PATH/thesis2020/manipulator_training/gym_environments/envs/lever_env/
+$ python ManipulatorLeverEnv.py
+```
+This should cause both the lever and
+
+####Et voila!
 You may now begin training of other algorithms, by using the classic gym recepie of env = gym.make('ManipulatorLeverEnv-v0', ..)!
 
 ## Contact
