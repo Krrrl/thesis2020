@@ -77,7 +77,7 @@ If you get stuck, have a look at how things are done for the lever_env.
 
 
 ### Debugging
-For debugging of the ROS inputs, you can seperate the one, cloutet terminal running:
+For debugging of the ROS nodes, you can seperate the one, cloutet terminal running:
 ```shell
 $ roslaunch gym_manipulator_interface gym_controlled_manipulator.launch
 ```
