@@ -20,23 +20,23 @@ The basic usage of the framework is as follows:
 ```shell
 $ python2
 ```
+```python
+>>> import gym
 
-&gt;&gt;&gt; import gym
+>>> import gym_environments.envs
 
-&gt;&gt;&gt; import gym_environments.envs
+>>> import ros_message_listener.eavesdrop as eavesdrop
 
-&gt;&gt;&gt; import ros_message_listener.eavesdrop as eavesdrop
+>>> from embedded_lever_interface.interface import Lever as LeverClass
 
-&gt;&gt;&gt; from embedded_lever_interface.interface import Lever as LeverClass
+>>> from ManipulatorAction import ManipulatorAction
 
-&gt;&gt;&gt; from ManipulatorAction import ManipulatorAction
+>>> action_space = ManipulatorAction()
 
-&gt;&gt;&gt; action_space = ManipulatorAction()
+>>> lever = LeverClass()
 
-&gt;&gt;&gt; lever = LeverClass()
-
-&gt;&gt;&gt; env = gym.make('ManipulatorLeverEnv-v0', ManipulatorActions = action_space, LeverInstance = lever, goal_state=250)
-
+>>> env = gym.make('ManipulatorLeverEnv-v0', ManipulatorActions = action_space, LeverInstance = lever, goal_state=250)
+```
 You have now instanciated a working GYM environment, and can begin training.
 
 
