@@ -1,10 +1,10 @@
-README.txt
 setup.py
 embedded_lever_interface/__init__.py
 embedded_lever_interface/interface.py
 gym_environments/__init__.py
 gym_environments/envs/__init__.py
 gym_environments/envs/lever_env/ManipulatorLeverEnv.py
+gym_environments/envs/lever_env/StartPoseTester.py
 gym_environments/envs/lever_env/__init__.py
 gym_environments/envs/lever_env/import_test.py
 manipulator_training.egg-info/PKG-INFO

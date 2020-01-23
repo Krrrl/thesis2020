@@ -5,26 +5,27 @@ import rospy
 
 from gym_manipulator_interface.srv import ActionQueue
 
-action_space = {0:'y', 
-								1:'h',
-								2:'u',
-								3:'j',
-								4:'i',
-								5:'k',
-								6:'o',
-								7:'l',
-								8:'g',
-								9:'f',
-								'init':'1',
-								'home':'2'}
+# action_space = {0:'y', 
+# 					1:'h',
+# 					2:'u',
+# 					3:'j',
+# 					4:'i',
+# 					5:'k',
+# 					6:'o',
+# 					7:'l',
+# 					8:'g',
+# 					9:'f'}
+
+# reset_commands = {10:'p',
+# 					11:'m'}
 
 queued_actions = []
 
 def handle_queue_request(req):
 	
 	if(req.request_type == "POP"):
-		print("Executing action!\n")
-		if(queued_actions):
+		if queued_actions:
+			print("Executing action!\n")
 			print("Current action queue: %s \n" %queued_actions)
 			action = queued_actions.pop(0)
 			print("Executed action: %s \n" %action)
@@ -39,10 +40,11 @@ def handle_queue_request(req):
 		print("Queueing action!\n")
 		queued_actions.append(req.action)
 		print("Action %s was queued!\n" % req.action)
-		return "SUCCESS"
+		return "SUCCESSFULLY QUEUED: {}".format(req.action)
 
 	else:
 		print("Received invalid request!")
+		return '!'
 
 
 def action_server():

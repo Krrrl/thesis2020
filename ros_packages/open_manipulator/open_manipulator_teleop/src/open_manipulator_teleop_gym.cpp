@@ -303,9 +303,9 @@ void OpenManipulatorTeleop::setGoal(char ch)
     setToolControl(joint_angle);
   }
 
-  else if(ch == '2')
+  else if(ch == 'p' || ch == 'P')
   {
-    printf("input : 2 \thome pose\n");
+    printf("input : p \thome pose\n");
     std::vector<std::string> joint_name;
     std::vector<double> joint_angle;
     double path_time = 2.0;
@@ -316,18 +316,23 @@ void OpenManipulatorTeleop::setGoal(char ch)
     joint_name.push_back("joint4"); joint_angle.push_back(0.70);
     setJointSpacePath(joint_name, joint_angle, path_time);
   }
-  else if(ch == '1')
+  else if(ch == 'm' || ch == 'M')
   {
-    printf("input : 1 \tinit pose\n");
+    printf("input : m \tideal start pose\n");
 
     std::vector<std::string> joint_name;
     std::vector<double> joint_angle;
     double path_time = 2.0;
-    joint_name.push_back("joint1"); joint_angle.push_back(0.0);
-    joint_name.push_back("joint2"); joint_angle.push_back(0.0);
-    joint_name.push_back("joint3"); joint_angle.push_back(0.0);
-    joint_name.push_back("joint4"); joint_angle.push_back(0.0);
+    joint_name.push_back("joint1"); joint_angle.push_back(0.73);
+    joint_name.push_back("joint2"); joint_angle.push_back(0.01);
+    joint_name.push_back("joint3"); joint_angle.push_back(0.42);
+    joint_name.push_back("joint4"); joint_angle.push_back(1.11);
     setJointSpacePath(joint_name, joint_angle, path_time);
+
+    //close gripper
+    std::vector<double> gripper_angle;
+    gripper_angle.push_back(-0.01);
+    setToolControl(gripper_angle);
   }
 }
 
@@ -398,7 +403,6 @@ int main(int argc, char **argv)
   {
     if (ch != '!')
     {
-      ch = (int)ch;
       ros::spinOnce();
       openManipulatorTeleop.printText();
       ros::spinOnce();
@@ -406,7 +410,6 @@ int main(int argc, char **argv)
     }
     else
     {
-      std::cout << "Time to fucking die i guess" << std::endl;
       ros::spinOnce();
     }
     ros::Duration(0, 500000000).sleep();

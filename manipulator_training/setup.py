@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 setup(
       name='manipulator_training',
       version='0.1',
-      description='Training RL agents on a Manipulator for different physical tasks.',
+      description='Framework for training RL agents on physical environments.',
       author='Karl Ylvisaker',
       author_email='km.ylvisaker@gmail.com',
       packages = find_packages(),

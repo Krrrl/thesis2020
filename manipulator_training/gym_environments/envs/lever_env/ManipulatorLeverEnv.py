@@ -23,10 +23,6 @@ class ManipulatorLeverEnv(gym.Env):
 
     self.__SLACK = 0.001
     self.__use_platform = use_platform
-    #self.environment_ready = False
-    #self.trail_in_progress = False
-    #self.reset_in_progress = False
-    #self.reset_called      = False
 
     eavesdrop.init_eavesdropper()
 
@@ -37,6 +33,7 @@ class ManipulatorLeverEnv(gym.Env):
     self.goal_state = goal_state
 
     self.Lever.set_Goal(self.goal_state)
+
 
   def step(self, action):
     if(self.ManipulatorActions.validAction(action)):
@@ -50,12 +47,16 @@ class ManipulatorLeverEnv(gym.Env):
 
     else:
       print("---------------------------------")
-      print("--------INVALID ACTION-----------")
+      print("-------- INVALID ACTION ---------")
       print("---------------------------------")
       
 
 
   def reset(self, manipulator_random_init = False, lever_random_init = False):
+
+    print("---------------------------------------")
+    print("---------RESETTING ENVIRONMENT---------")
+    print("---------------------------------------")
 
     #RESETTING MANIPULATOR
     if(manipulator_random_init):
@@ -63,14 +64,19 @@ class ManipulatorLeverEnv(gym.Env):
       print("!!!!!!!!!! NOT YET IMPLEMENTED !!!!!!!!!!")
       print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
 
-    #else:
-      #self.ManipulatorActions.queueAction('init')
+    else:
+      self.ManipulatorActions.queueAction(10)
+      time.sleep(2)
+      self.ManipulatorActions.queueAction(11)
+      time.sleep(2)
 
     #RESETTING LEVER
     if(lever_random_init):
       self.Lever.reset_RAN()
+      time.sleep(2)
     else:
       self.Lever.reset_ABS()
+      time.sleep(2)
 
     #This is ment to be blocking, so that the environment has time to reset before new querries. 
     lever_ready = False
@@ -87,28 +93,7 @@ class ManipulatorLeverEnv(gym.Env):
     self.previous_gripper_kinematics = self.eavesdrop_current_gripper_state()
     self.current_gripper_kinematics = self.eavesdrop_current_gripper_state()
 
-    ###################################################
-    ########### NON BLOCKING MULTICALL METHOD #########
-    ###################################################
-    # if(self.reset_in_progress):
-    #   self.environment_ready = lever.env_Ready()
-      
-    #   if(self.environment_ready):
-    #     self.reset_in_progress = False
-    #     self.reset_called      = False
-
-    # else:
-
-    #   if(not self.reset_called):
-        
-    #     if(random_init):
-    #       lever.resetRan()
-    #     else:
-    #       lever.resetAbs()
-        
-    #     self.reset_called = True
-
-    #   self.reset_in_progress = True
+    return self.current_gripper_kinematics
 
 
   def render(self, mode='human', close = False):
@@ -132,16 +117,18 @@ class ManipulatorLeverEnv(gym.Env):
     #BLOCKING!
     if(self.__use_platform):
       while self.eavesdrop_manipulator_moving_state():
+        time.sleep(0.1)
         continue
     elif(not self.__use_platform):
       while(not self.gripper_position_changed(self.previous_gripper_kinematics, self.current_gripper_kinematics)):
         self.current_gripper_kinematics = self.eavesdrop_current_gripper_state()
+        time.sleep(0.1)
 
   def gripper_position_changed(self, previous_pos, current_pos):
-    print("I WAS ASKED TO COMPARE, PREVIOUS POS: ")
-    print(previous_pos)
-    print("AND CURRENT POS: ")
-    print(current_pos)
+    # print("I WAS ASKED TO COMPARE, PREVIOUS POS: ")
+    # print(previous_pos)
+    # print("AND CURRENT POS: ")
+    # print(current_pos)
 
     if(((current_pos.pose.position.x <= (previous_pos.pose.position.x - self.__SLACK)) or (current_pos.pose.position.x > (previous_pos.pose.position.x + self.__SLACK))) 
         or ((current_pos.pose.position.y <= (previous_pos.pose.position.y - self.__SLACK)) or (current_pos.pose.position.y > (previous_pos.pose.position.y + self.__SLACK)))
@@ -207,8 +194,8 @@ if __name__ == '__main__':
   env.Lever.reset_RAN()
   time.sleep(2)
 
-  print("---------------------------------------")
-  print("---------RESETTING ENVIRONMENT---------")
-  print("---------------------------------------")
-
   env.reset()
+
+  print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+  print("!!!!! Integration test complete !!!!!!!")
+  print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")

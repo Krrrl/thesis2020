@@ -16,7 +16,15 @@ typedef enum
 
 typedef enum
 {
-  ERROR		    = 0,
+  DC            = 0,
+  ENDPOINT      = 1,
+  MID           = 2,
+  RANDOM        = 3
+}reset_t;
+
+typedef enum
+{
+  NA		      = 0,
   setGoal     = 1,
   getGoal 	  = 2,
   getAbsPos   = 3,
@@ -25,14 +33,12 @@ typedef enum
   resetEnvABS = 6,
   resetEnvRAN = 7,
   envReady 	  = 8,
-  startTrail  = 9
+  startTrail  = 9,
+  resetEnvMID = 10
   
 }request_t;
 
 int encoder_pos = 0;  
-
-const int INIT_RANDOM = 0;
-const int INIT_ENDPOINT = 1;
 
 const int encoder_MIN_POS = -500;
 const int encoder_MAX_POS = 500;
@@ -52,7 +58,7 @@ int encoder_state_change = 0;
 int env_initialized = 0;
 
 operation_t OPERATION_MODE = INIT;
-request_t PREVIOUS_REQUEST = ERROR;
+request_t PREVIOUS_REQUEST = NA;
 
 //PARAMETERS YOU MAY CHANGE
 
@@ -133,33 +139,6 @@ void print_encoder_data()
   Serial.println(" steps.");
 }
 
-void init_endpoint_lever_position()
-{
-  //motor step in a direction, until it reaches target position.
-  int target_pos = encoder_MAX_POS;
-
-  motor_move_to_pos(target_pos);
-  
-  while((stepper.getMotorState()))
-  {
-    continue;
-  }
-  set_operation_mode(READY);
-}
-
-void init_random_lever_position()
-{
-  int target_pos = random(encoder_MIN_POS, encoder_MAX_POS);
-
-  motor_move_to_pos(target_pos);
-
-  while((stepper.getMotorState()))
-  {
-    continue;
-  }
-  set_operation_mode(READY);
-}
-
 void motor_move_to_pos(int target_pos)
 {
   int initial_pos = get_encoder_pos();
@@ -174,8 +153,12 @@ void motor_move_to_pos(int target_pos)
     Serial.println(initial_pos);
     Serial.println("------------------------------");
   }
-  
-  if(target_pos < initial_pos)
+
+  if((target_pos == (initial_pos + SLACK)) || (target_pos == (initial_pos - SLACK)))
+  {
+    //This block is empty on purpose.
+  }
+  else if(target_pos < initial_pos)
   {
     stepper.runContinous(CW);
     while(target_pos < get_encoder_pos())
@@ -187,7 +170,6 @@ void motor_move_to_pos(int target_pos)
         Serial.println(get_encoder_pos());
       }
     }
-    stepper.hardStop(SOFT);
   }
   else if(target_pos > initial_pos)
   {
@@ -201,11 +183,11 @@ void motor_move_to_pos(int target_pos)
         Serial.println(get_encoder_pos());
       }
     }
-    stepper.hardStop(SOFT);
   }
+  stepper.hardStop(SOFT);
 }
 
-void reset_env(int endpoint)
+void reset_env(reset_t endpoint)
 {
   if(DEBUG_VERBOSE)
   {
@@ -218,27 +200,46 @@ void reset_env(int endpoint)
 
   motor_move_to_pos(encoder_MIDDLE_POS);
 
-  if(endpoint)
+  int target_pos = 0;
+  
+  switch(endpoint)
   {
-    init_endpoint_lever_position();
-  }
-  else
-  {
-    init_random_lever_position();
+    case DC:
+    {
+      target_pos = get_encoder_pos();
+      break;
+    }
+    case ENDPOINT:
+    {
+      target_pos = encoder_MAX_POS;
+      break;
+    }
+    case MID:
+    {
+      target_pos = encoder_MIDDLE_POS;
+      break;
+    }
+    case RANDOM:
+    {
+      target_pos = random(encoder_MIN_POS, encoder_MAX_POS);
+      break;
+    }
   }
 
-  set_operation_mode(READY);
+  motor_move_to_pos(target_pos);
+
   env_initialized = 1;
+  set_operation_mode(READY);
 }
 
 request_t int_to_request(int request)
 {
-  request_t result = ERROR;
+  request_t result = NA;
   switch(request)
   {
   	case 0:
   	{
-  	  result = ERROR;
+  	  result = NA;
   	  break;
   	}
     case 1:
@@ -286,6 +287,11 @@ request_t int_to_request(int request)
  	    result = startTrail;
       break;
     }
+    case 10:
+    {
+      result = resetEnvMID;
+      break;
+    }
   }
   return result;
 }
@@ -328,6 +334,7 @@ void handle_serial_request(request_t s_req)
   {
     case setGoal:
     {
+        while(Serial.available() < GOAL_BYTE_SIZE);
       	int new_goal = Serial.parseInt();
       	
       	if (DEBUG_VERBOSE)
@@ -369,12 +376,14 @@ void handle_serial_request(request_t s_req)
     }
     case resetEnvABS:
     {
-      	reset_env(INIT_ENDPOINT);
+        reset_t endpoint = ENDPOINT;
+      	reset_env(endpoint);
       	break;  
     }
     case resetEnvRAN:
     {
-      	reset_env(INIT_RANDOM);
+        reset_t endpoint = RANDOM;
+      	reset_env(endpoint);
       	break;
     }
     case envReady:
@@ -396,6 +405,12 @@ void handle_serial_request(request_t s_req)
           write_serial_data(0);
         }
         break;
+    }
+    case resetEnvMID:
+    {
+      reset_t endpoint = MID;
+      reset_env(endpoint);
+      break;
     }
   }
 

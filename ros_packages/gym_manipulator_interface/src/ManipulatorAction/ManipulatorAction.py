@@ -16,8 +16,8 @@ class ManipulatorAction():
 	# 	o / l - joint 4 increase / decrease
 	# 	g / f - gripper open / gripper close
 	#
-	#	'1': init pose
 	#	'2': home pose
+	#	'3': ideal start pose
 	# NB! No implementation of task space yet, due to issue with freezing of the open manipulator controller.
 
 	def __init__(self):
@@ -31,15 +31,21 @@ class ManipulatorAction():
 								6:'o',
 								7:'l',
 								8:'g',
-								9:'f',
-								'init':'1',
-								'home':'2'}
+								9:'f'
+							}
+		self.utility_commands = {10:'p',
+									11:'m'}
 
 	def getSize(self):
 		return len(self.action_space)
 
 	def getAction_str(self, action):
-		return self.action_space.get(action, "Invalid action")
+		if action in self.action_space:
+			return self.action_space.get(action, "Invalid action")
+		elif action in self.utility_commands:
+			return self.utility_commands.get(action, "Invalid action")
+		else:
+			return "Invalid action"
 
 	def getRandomSample(self):
 		choice = rn.sample(self.action_space, 1)
@@ -50,7 +56,7 @@ class ManipulatorAction():
 			print(key, value)
 
 	def validAction(self, action):
-		if(action in self.action_space):
+		if((action in self.action_space) or (action in self.utility_commands)):
 			return True
 		else:
 			return False
@@ -58,12 +64,14 @@ class ManipulatorAction():
 	def queueAction(self, action):
 		if(type(action) is int):
 			action = self.getAction_str(action)
+			print("action in string version is: {}".format(action))
 
 		rospy.wait_for_service('/open_manipulator/queue_action')
 
 		try:
 			queue_action = rospy.ServiceProxy('/open_manipulator/queue_action', ActionQueue)
 			response = queue_action(self.request_type, action)
+			print(response)
 			return response
 
 		except rospy.ServiceException, e:

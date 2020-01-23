@@ -1,1 +1,6 @@
 Ideas for future improvement:
+
+
+-ManipulatorAction should change name to Manipulator or ManipulatorActionSpace, or something more intuitive than ManipulatorAction atleast.
+
+

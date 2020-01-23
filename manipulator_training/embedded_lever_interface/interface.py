@@ -17,7 +17,8 @@ class Lever(object):
 								"resetEnvABS" 	: 6, 
 								"resetEnvRAN" 	: 7,
 								"envReady"		: 8,
-								"startTrail"	: 9
+								"startTrail"	: 9,
+								"resetEnvMID"	: 10
 								}
 		self.init_serial_connection()
 
@@ -77,6 +78,9 @@ class Lever(object):
 
 	def reset_RAN(self):
 		self.write_to_serial(self.serial_commands.get("resetEnvRAN", 0))
+
+	def reset_MID(self):
+		self.write_to_serial(self.serial_commands.get("resetEnvMID", 0))
 
 	def env_Ready(self):
 		received = None
@@ -150,5 +154,8 @@ if __name__ == '__main__':
 		elif(command == 9):
 			print("\n")
 			print(lever.start_Trail())
+		elif(command == 10):
+			print("Sending reset_MID signal!")
+			lever.reset_MID()
 		else:
 			print("Not a valid command.")

@@ -4,7 +4,10 @@ The module is used by the ManipulatorLever-gym environment, so you dont need to 
 
 
 
-
+ISSUES:
+Make sure that the U2D2 serial converter(OpenManipulator) is connected to the computer BEFORE you connect the lever.
+If not, the lever will take the TTY0 serial port, and this code is not flexible to accommodate that.
+Its a really ugly feature.
 
 
 
