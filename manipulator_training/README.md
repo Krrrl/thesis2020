@@ -39,7 +39,13 @@ $ python2
 ```
 You have now instanciated a working GYM environment, and can begin training.
 
-
+NB! Remember that you NEED to have two other terminals running, for the framework to function:
+```shell
+$ roscore
+```
+```shell
+$ roslaunch gym_manipulator_interface gym_controlled_manipulator.launch
+```
 
 ## Developing:
 If you would like to extend the framework by adding additional physical manipulation tasks, this is how you should proceed:
@@ -68,3 +74,18 @@ Create new modules/packages for your physical environment, place them in the bas
 If you get stuck, have a look at how things are done for the lever_env.
 
 
+
+
+### Debugging
+For debugging of the ROS inputs, you can seperate the one, cloutet terminal running:
+```shell
+$ roslaunch gym_manipulator_interface gym_controlled_manipulator.launch
+```
+Into three separate terminals, running:
+```shell
+$ roslaunch open_manipulator_controller open_manipulator_controller.launch
+``````shell
+$ roslaunch open_manipulator_teleop open_manipulator_teleop_gym.launch
+``````shell
+$ roslaunch gym_manipulator_interface manipulator_action_server.launch
+```
