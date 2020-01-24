@@ -11,3 +11,5 @@ J2:    -2.05	1.67 (rad)
 J3:    -1.67	1.53 (rad)
 J4:    -1.8	2.0  (rad)
 GR:    -0.1	0.1  (m)
+
+These are the ABSOLUTE MINIMUM and MAXIMUM. Shave off 0.1 at least, for good measure.
