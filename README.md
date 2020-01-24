@@ -124,7 +124,7 @@ $ python ManipulatorLeverEnv.py
 This should cause both the lever and manipulator to move, settling at their respective reset positions.
 
 #### Et voila!
-You may now begin training of other algorithms, by using the classic gym recepie of env = gym.make('ManipulatorLeverEnv-v0', ..)!
+You may now begin training of other algorithms, by using the classic gym recepie of env = gym.make('ManipulatorLeverEnv-v0', ..)! Please see the manipulator_training/README.md for more detail on how to utilize the framwork.
 
 ## Contact
 Reach out if you have trouble using this, I'm happy to help!
