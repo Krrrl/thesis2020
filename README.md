@@ -66,11 +66,10 @@ $ sudo chmod +x gym_environments/envs/lever_env/ManipulatorLeverEnv.py
 ```
 
 ### 3. Augmenting the ROBOTIS package
-Follow the instructions of the ros_packages/README.md, namely:
-- Place the gym_manipulator_interface ROS package into your catkin workspace.
+To augment the ROBOTIS package, we will need to:
+- Place the gym_manipulator_interface ROS package into the catkin workspace.
 - Replace ROBOTIS packge open_manipulator_msgs with the augmented version.
 - Replace ROBOTIS package open_manipulator/open_manipulator_teleop with the augmented version.
-- cd ~/yourpath/catkin_ws && catkin_make
 
 ```shell
 $ cd ~/YOUR/PATH/thesis2020/ros_packages/
