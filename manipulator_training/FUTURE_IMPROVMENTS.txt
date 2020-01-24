@@ -1,1 +1,13 @@
 -Make ManipulatorLeverEnv inherit from LeverInterface, rather than getting passed an instance.
+
+-Implement RANDOM manipulator starting state:
+Make the change in ~/catkin_ws/src/open_manipulator/open_manipulator_teleop/src/open_manipulator_teleop_gym.cpp
+
+JOINT LIMITS:
+
+	MIN	MAX
+J1:    -3.14    3.14 (rad)	
+J2:    -2.05	1.67 (rad)
+J3:    -1.67	1.53 (rad)
+J4:    -1.8	2.0  (rad)
+GR:    -0.1	0.1  (m)
