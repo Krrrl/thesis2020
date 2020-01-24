@@ -26,14 +26,15 @@ The eavesdrop module has some topic-spesific functions implemented(namely for th
 
 >>> moving_state = eavesdrop.get_manipulator_moving_state()
 ```
-#### General case:
-
-&gt;&gt;&gt; msg = get_topic_message(topic_name -> str, msg_type)
-
-The general case function can be used to extract any message from any topic, as long as you know the topic name and message type. Both topic name and message type can be found by using "rqt" with the specific ros nodes running.
+## Boilerplate:
+```python
+>>> msg = eavesdrop.get_topic_message(topic_name -> str, msg_type)
+```
+The boilerpalte function can be used to extract any message from any topic, as long as you know the _topic name_ and _message type._ Both topic name and message type can be found by using "rqt" with the specific ros nodes running.
 ```shell
 $ rqt 
 ```
+
 
 
 
