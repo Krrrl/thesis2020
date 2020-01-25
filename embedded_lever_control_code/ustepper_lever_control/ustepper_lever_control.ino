@@ -29,7 +29,7 @@ typedef enum
   getGoal 	  = 2,
   getAbsPos   = 3,
   getRelPos   = 4,
-  getReward   = 5,
+  getTerminal = 5,
   resetEnvABS = 6,
   resetEnvRAN = 7,
   envReady 	  = 8,
@@ -66,8 +66,8 @@ const int DEBUG_VERBOSE = 0;
 const int STEP_INC = 10;
 const int SLACK = 1;
 
-const int MAX_REWARD = 100;
-const int REG_REWARD = 0;
+const int TERMINAL = 1;
+const int NON_TERMINAL = 0;
 
 int goal_pos = 0;
 
@@ -264,7 +264,7 @@ request_t int_to_request(int request)
     }
     case 5:
     {
-      result = getReward;
+      result = getTerminal;
       break;
     }
     case 6:
@@ -368,10 +368,10 @@ void handle_serial_request(request_t s_req)
       	write_serial_data(relPos);
       	break;
     }
-    case getReward:
+    case getTerminal:
     {
-      	int reward = get_reward();
-      	write_serial_data(reward);
+      	int terminal = get_terminal();
+      	write_serial_data(terminal);
       	break;
     }
     case resetEnvABS:
@@ -447,19 +447,18 @@ int env_isReady()
   return env_initialized;
 }
 
-int get_reward()
+int get_terminal()
 {
-  //NBNB implementere spicy/non-sparse kostfunksjon her?
   int relative_distance = get_relative_pos();
 
   if(relative_distance <= SLACK)
   {
     set_operation_mode(TRAIL_ENDED);
-    return MAX_REWARD;
+    return TERMINAL;
   }
   else
   {
-    return REG_REWARD;
+    return NON_TERMINAL;
   }
 }
 

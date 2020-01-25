@@ -15,18 +15,15 @@ class MinimalGYM(gym.Env):
 		pass
 
 	def step(self, action):
-
 		return observation, reward, done, info
 
 	def reset(self):
-
 		return observation
 
 	def render(self):
 		pass
 
 	def _get_obs(self):
-
 		return observation
 
 if __name__ == '__main__':

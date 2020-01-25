@@ -1,7 +1,7 @@
 Metadata-Version: 1.0
 Name: manipulator-training
 Version: 0.1
-Summary: Training RL agents on a Manipulator for different physical tasks.
+Summary: Framework for training RL agents on physical environments.
 Home-page: UNKNOWN
 Author: Karl Ylvisaker
 Author-email: km.ylvisaker@gmail.com

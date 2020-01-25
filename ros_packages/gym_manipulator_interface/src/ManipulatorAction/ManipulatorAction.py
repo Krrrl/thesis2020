@@ -33,8 +33,9 @@ class ManipulatorAction():
 								8:'g',
 								9:'f'
 							}
-		self.utility_commands = {10:'p',
-									11:'m'}
+		self._utility_commands = {10:'m',
+									11:'n',
+									12:'p'}
 
 	def getSize(self):
 		return len(self.action_space)
@@ -42,10 +43,13 @@ class ManipulatorAction():
 	def getAction_str(self, action):
 		if action in self.action_space:
 			return self.action_space.get(action, "Invalid action")
-		elif action in self.utility_commands:
-			return self.utility_commands.get(action, "Invalid action")
+		elif action in self._utility_commands:
+			return self._utility_commands.get(action, "Invalid action")
 		else:
 			return "Invalid action"
+
+	def getActionSpace(self):
+		return self.action_space
 
 	def getRandomSample(self):
 		choice = rn.sample(self.action_space, 1)
@@ -55,8 +59,20 @@ class ManipulatorAction():
 		for key, value in self.action_space.items():
 			print(key, value)
 
+	def reset_IDEAL(self):
+		self.queueAction(10)
+		time.sleep(2)
+		self.queueAction(11)
+		time.sleep(2)
+
+	def reset_RANDOM(self):
+		self.queueAction(10)
+		time.sleep(2)
+		self.queueAction(12)
+		time.sleep(3)
+
 	def validAction(self, action):
-		if((action in self.action_space) or (action in self.utility_commands)):
+		if((action in self.action_space) or (action in self._utility_commands)):
 			return True
 		else:
 			return False

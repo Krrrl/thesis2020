@@ -10,8 +10,9 @@
 
 //OWN ADDITION
 #include "open_manipulator_msgs/ActionQueue.h"
-
 #include <iostream>
+#include <cstdlib>
+#include <ctime>
 
 #define NUM_OF_JOINT 4
 #define DELTA 0.01        //default 0.01
@@ -65,6 +66,7 @@ class OpenManipulatorTeleop
 
   void printText();
   void setGoal(char ch);
+  void getRandomManipulatorPosition(float* arr);
 
   void restoreTerminalSettings(void);
   void disableWaitingForEnter(void);

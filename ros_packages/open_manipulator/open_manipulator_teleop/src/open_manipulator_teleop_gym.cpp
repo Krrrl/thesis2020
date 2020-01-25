@@ -303,30 +303,57 @@ void OpenManipulatorTeleop::setGoal(char ch)
     setToolControl(joint_angle);
   }
 
-  else if(ch == 'p' || ch == 'P')
+  else if(ch == 'm' || ch == 'M')
   {
-    printf("input : p \thome pose\n");
+    printf("input : m \thome pose\n");
     std::vector<std::string> joint_name;
     std::vector<double> joint_angle;
-    double path_time = 2.0;
+    double path_time = 3.0;
 
     joint_name.push_back("joint1"); joint_angle.push_back(0.0);
     joint_name.push_back("joint2"); joint_angle.push_back(-1.05);
     joint_name.push_back("joint3"); joint_angle.push_back(0.35);
     joint_name.push_back("joint4"); joint_angle.push_back(0.70);
     setJointSpacePath(joint_name, joint_angle, path_time);
+
+    //open gripper
+    std::vector<double> gripper_angle;
+    gripper_angle.push_back(0.01);
+    setToolControl(gripper_angle);
   }
-  else if(ch == 'm' || ch == 'M')
+  else if(ch == 'n' || ch == 'N')
   {
-    printf("input : m \tideal start pose\n");
+    printf("input : n \tresetting to IDEAL start pose\n");
 
     std::vector<std::string> joint_name;
     std::vector<double> joint_angle;
-    double path_time = 2.0;
+    double path_time = 3.0;
     joint_name.push_back("joint1"); joint_angle.push_back(0.73);
     joint_name.push_back("joint2"); joint_angle.push_back(0.01);
     joint_name.push_back("joint3"); joint_angle.push_back(0.42);
     joint_name.push_back("joint4"); joint_angle.push_back(1.11);
+    setJointSpacePath(joint_name, joint_angle, path_time);
+
+    //close gripper
+    std::vector<double> gripper_angle;
+    gripper_angle.push_back(-0.01);
+    setToolControl(gripper_angle);
+  }
+  else if(ch == 'p' || ch == 'p')
+  {
+    printf("input : p \tresetting to RANDOM start pose\n");
+
+    std::vector<std::string> joint_name;
+    std::vector<double> joint_angle;
+    double path_time = 3.0;
+
+    float random_positions[NUM_OF_JOINT] = {0};
+    getRandomManipulatorPosition(random_positions);
+
+    joint_name.push_back("joint1"); joint_angle.push_back(random_positions[0]);
+    joint_name.push_back("joint2"); joint_angle.push_back(random_positions[1]);
+    joint_name.push_back("joint3"); joint_angle.push_back(random_positions[2]);
+    joint_name.push_back("joint4"); joint_angle.push_back(random_positions[3]);
     setJointSpacePath(joint_name, joint_angle, path_time);
 
     //close gripper
@@ -352,16 +379,51 @@ void OpenManipulatorTeleop::disableWaitingForEnter(void)
 }
 
 
-//BEGINING OF INSERTED CODE
+//BEGINING OF INSERTED FUNCTIONS
+
+void OpenManipulatorTeleop::getRandomManipulatorPosition(float* random_pos_array)
+{
+  float joint_limits[] = {-3.10, 3.10, -1.31, -0.31, -1.45, 0.95, -1.7, -0.04};
+
+  //JOINT HARD LIMITATIONS
+  //Left for future reference:
+  //float joint1_MIN = -3.10;
+  //float joint1_MAX = 3.10;
+
+  //float joint2_MIN = -1.95;
+  //float joint2_MAX = 1.57;
+  
+  //float joint3_MIN = -1.57;
+  //float joint3_MAX = 1.43;
+ 
+  //float joint4_MIN = -1.7;
+  //float joint4_MAX = 1.9;
+  
+  float lever_protection_sector_high = 0.34;
+  float lever_protection_sector_low = -0.94;
+
+  for (int i = 0; i < NUM_OF_JOINT; ++i)
+  {
+    random_pos_array[i] = joint_limits[(i*2)] + static_cast <float> (rand()) /( static_cast <float> (RAND_MAX/(joint_limits[(i*2)+1]-joint_limits[(i*2)])));
+  }
+
+  //Horrible, but effective.
+  //The following protects the manipulator and lever from colliding during random initialization.
+  //I welcome a prettier solution to this.
+  while((lever_protection_sector_low < (random_pos_array[0])) and ((random_pos_array[0] < lever_protection_sector_high)))
+  {
+    random_pos_array[0] = joint_limits[0] + static_cast <float> (rand()) /( static_cast <float> (RAND_MAX/(joint_limits[1]-joint_limits[0])));
+  }
+
+  //Solution for rounding to two decimal place.
+  for (int i = 0; i < NUM_OF_JOINT; ++i)
+  {
+    random_pos_array[i] = (float)((int)(random_pos_array[i]*100 + 0.5))/100;
+  }
+}
 
 char OpenManipulatorTeleop::getChar(void)
 {  
-
-  //creates service instance
-  //ros::NodeHandle n;
-  //ros::ServiceClient client = n.serviceClient<open_manipulator_teleop::action_queue>("action_queue");
-  
-  //Creates instance of service request
   open_manipulator_msgs::ActionQueue srv;
   srv.request.request_type = REQUEST_ACTION;
   srv.request.action = "NONE";
@@ -378,12 +440,12 @@ char OpenManipulatorTeleop::getChar(void)
   
   else
   {
-    std::cout << "UNSUCCESSFUL attempt to contact action server" << std::endl;
+    std::cout << "UNSUCCESSFUL attempt to contact action server." << std::endl;
     return '!';
   }
 }
 
-
+//END OF INSERTED FUNCTIONS
 
 int main(int argc, char **argv)
 {
@@ -392,7 +454,10 @@ int main(int argc, char **argv)
 
   OpenManipulatorTeleop openManipulatorTeleop;
 
-  ROS_INFO("OpenManipulator teleoperation using GYM environment start");
+  //while the
+  std::srand(time(NULL));
+
+  ROS_INFO("OpenManipulator teleoperation using GYM environment start.");
   openManipulatorTeleop.disableWaitingForEnter();
 
   ros::spinOnce();

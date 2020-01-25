@@ -13,7 +13,7 @@ class Lever(object):
 								"getGoal" 		: 2,
 								"getAbsPos"		: 3, 
 								"getRelPos"		: 4, 
-								"getReward"		: 5, 
+								"getTerminal"	: 5, 
 								"resetEnvABS" 	: 6, 
 								"resetEnvRAN" 	: 7,
 								"envReady"		: 8,
@@ -66,10 +66,10 @@ class Lever(object):
 			received = self.read_data_from_serial()
 		return received
 
-	def get_Reward(self):
+	def get_Terminal(self):
 		received = None
 		while(received == None):
-			self.write_to_serial(self.serial_commands.get("getReward", 0))
+			self.write_to_serial(self.serial_commands.get("getTerminal", 0))
 			received = self.read_data_from_serial()
 		return received
 
@@ -141,7 +141,7 @@ if __name__ == '__main__':
 			print(lever.get_REL_Pos())
 		elif(command == 5):
 			print("\n")
-			print(lever.get_Reward())
+			print(lever.get_Terminal())
 		elif(command == 6):
 			print("Sending reset_ABS signal!")
 			lever.reset_ABS()

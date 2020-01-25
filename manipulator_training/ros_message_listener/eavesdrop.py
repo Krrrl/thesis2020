@@ -1,8 +1,12 @@
 #! /usr/bin/env python
 
 import rospy
-import std_msgs
 
+import std_msgs
+#import geometry_msgs
+#import sensor_msgs
+
+from sensor_msgs.msg import JointState
 from open_manipulator_msgs.msg import KinematicsPose
 from open_manipulator_msgs.msg import OpenManipulatorState
 
@@ -11,9 +15,14 @@ TIMEOUT = 1
 def init_eavesdropper():
 	rospy.init_node('eavesdropper', anonymous=True)
 
-def get_gripper_kinematics_pose():
+def get_manipulator_gripper_kinematics_pose():
 	kinematics_pose = rospy.wait_for_message('/open_manipulator/gripper/kinematics_pose', KinematicsPose)
 	return kinematics_pose
+
+def get_manipulator_joint_states():
+	joint_states = rospy.wait_for_message('/open_manipulator/joint_states', JointState) 
+	return joint_states
+
 
 def get_manipulator_moving_state():
 	state = rospy.wait_for_message('/open_manipulator/states', OpenManipulatorState)
@@ -41,10 +50,18 @@ if __name__ == '__main__':
 	init_eavesdropper()
 	print("INITIALIZED!")
 
+	print("--------------------")
 	print("Checking GRIPPER POSITION: ")
-	data = get_gripper_kinematics_pose()
+	data = get_manipulator_gripper_kinematics_pose()
 	print("Got the data!")
 	print(data)
+
+	print("--------------------")
+	print("Checking JOINT POSITIONS: ")
+	data = get_manipulator_joint_state()
+	print("Got the data!")
+	print(data)
+
 
 	print("--------------------")
 	print("Checking MANIPULATOR_MOVING_STATE")
