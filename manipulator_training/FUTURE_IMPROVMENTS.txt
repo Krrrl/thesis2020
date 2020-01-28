@@ -1,5 +1,0 @@
--Make ManipulatorLeverEnv inherit from LeverInterface, rather than getting passed an instance.
-
--Perhaps reward changes in lever_rel_pos, not just end state
-
--Add camera data to manipulator state
